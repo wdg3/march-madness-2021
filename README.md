@@ -3,6 +3,7 @@ This project trains an AdaBoost model to output March Madness bracket prediction
 
 ## Dependencies
 - Python3
+- numpy
 - pandas
 - sklearn
 
