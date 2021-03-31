@@ -86,5 +86,5 @@ def run_model():
     params = run_grid_search(X, Y)
     model = fit_model(X, Y, params)
 
-    preds = predict(X_test, model, "MSubmissionStage2-2")
-    bracket(preds, "MGamePreds-2")
+    preds = predict(X_test, model, "MSubmissionStage")
+    bracket(preds, "MGamePreds")
