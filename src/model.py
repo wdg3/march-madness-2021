@@ -70,30 +70,21 @@ def bracket(preds, title):
         mapped.at[i, "Pred"] = row["Pred"]
     mapped.to_csv("/data/march-madness/" + title + ".csv", index=False)
 
-#params = run_grid_search(X, Y)
-#params = run_grid_search(X[["0", "1"]], Y)
+def run_model():
+    for i, row in X.iterrows():
+        for j in range(int(len(row) * 2 / 3)):
+            X.iat[i, j] = np.log(X.iloc[i, j])
 
-params = {'n_estimators': 1500, 'learning_rate': 0.00025, 'base_estimator': DecisionTreeClassifier(max_depth=3)}
+    for i, row in X_test.iterrows():
+        for j in range(int(len(row) * 2 / 3)):
+            X_test.iat[i, j] = np.log(X_test.iloc[i, j])
 
-#model = fit_model(X, Y, params)
-#seeds_model = fit_model(X[["0", "1", "0_comb"]], Y, params) 
+    for i in range(9):
+        X[str(i) + "_comb"] = X[str(2*i)] - X[str(2*i + 1)]
+        X_test[str(i) + "_comb"] = X_test[str(2*i)] - X_test[str(2*i + 1)]
 
-#preds = predict(X_test, model, "MSubmissionStage2-1")
-#bracket(preds, "MGamePreds-1")
+    params = run_grid_search(X, Y)
+    model = fit_model(X, Y, params)
 
-for i, row in X.iterrows():
-    for j in range(int(len(row) * 2 / 3)):
-        X.iat[i, j] = np.log(X.iloc[i, j])
-
-for i, row in X_test.iterrows():
-    for j in range(int(len(row) * 2 / 3)):
-        X_test.iat[i, j] = np.log(X_test.iloc[i, j])
-
-for i in range(9):
-    X[str(i) + "_comb"] = X[str(2*i)] - X[str(2*i + 1)]
-    X_test[str(i) + "_comb"] = X_test[str(2*i)] - X_test[str(2*i + 1)]
-
-model = fit_model(X, Y, params)
-
-preds = predict(X_test, model, "MSubmissionStage2-2")
-bracket(preds, "MGamePreds-2")
+    preds = predict(X_test, model, "MSubmissionStage2-2")
+    bracket(preds, "MGamePreds-2")
